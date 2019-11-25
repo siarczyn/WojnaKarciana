@@ -1,0 +1,115 @@
+//
+//  main.cpp
+//  chujjuz
+//
+//  Created by Dawid Siarczyński on 25/11/2019.
+//  Copyright © 2019 Dawid Siarczyński. All rights reserved.
+//
+
+#include <cstdlib>
+#include <iostream>
+#include <time.h>
+#include<string.h>
+
+struct Karta
+{
+	char* figura;
+	char* kolor;
+	int war;
+};
+//zmienne globalne
+Karta talia[52];
+Karta player1[26];
+Karta player2[26];
+char const* const figura[13] =
+{ "dwojka","trojka","czworka","piatka","szostka","siodemka","osemka","dziewiatka","dziesiatka","walet","dama","krol","as" };
+char const* const kolor[4] = { "trefl","karo","kier","pik" };
+
+using namespace std;
+
+
+
+
+void zlozTalie(Karta* wTalia, char const* const wFigura, char const* const wKolor)
+{
+	for (int i = 0; i < 52; i++)
+	{
+		*wTalia[i].figura = wFigura[i % 13];
+		wTalia[i].war = i % 13;
+		*wTalia[i].kolor = wKolor[i / 13];
+	}
+}
+
+void tasuj(Karta* wTalia)
+{
+	for (int i = 0; i < 52; i++)
+	{
+		int j = rand() % 52;
+		Karta t = wTalia[i];
+		wTalia[i] = wTalia[j];
+		wTalia[j] = t;
+	}
+}
+
+void wyswietl(Karta* wTalia)
+{
+	for (int i = 0; i < 52; i++)
+	{
+		cout << wTalia[i].figura << "\t";
+		if (strcmp(wTalia[i].kolor, "trefl") == 0) cout << "trefl";
+		if (strcmp(wTalia[i].kolor, "karo") == 0) cout << "karo";
+		if (strcmp(wTalia[i].kolor, "kier") == 0) cout << "kier";
+		if (strcmp(wTalia[i].kolor, "pik") == 0) cout << "pik";
+		cout << endl;
+	}
+};
+void wyswietlk(Karta* wTalia)
+{
+	for (int i = 0; i < 26; i++)
+	{
+		cout << wTalia[i].figura << "\t";
+		if (strcmp(wTalia[i].kolor, "trefl") == 0) cout << "trefl";
+		if (strcmp(wTalia[i].kolor, "karo") == 0) cout << "karo";
+		if (strcmp(wTalia[i].kolor, "kier") == 0) cout << "kier";
+		if (strcmp(wTalia[i].kolor, "pik") == 0) cout << "pik";
+		cout << endl;
+	}
+};
+void rozdaj(Karta* rek1, Karta* rek2, Karta* wTalia) {
+	for (int i = 0; i < 52; i++) {
+		if (i % 2) {
+			int j = 0;
+			Karta player1 = wTalia[i];
+			wTalia[i] = wTalia[j];
+			wTalia[j] = player1;
+			j++;
+		}
+		else {
+			int g = 0;
+			Karta player2 = wTalia[i];
+			wTalia[i] = wTalia[g];
+			wTalia[g] = player2;
+			g++;
+		}
+	}
+};
+
+
+int main()
+{
+
+	
+
+	srand(time(0));
+
+	zlozTalie(talia, *figura, *kolor);
+
+	//cout<<"talia ulozona"<<endl;
+	//wyswietl(talia);
+
+	tasuj(talia);
+	//    wyswietl(talia);
+	rozdaj(player1, player2, talia);
+	wyswietlk(player1);
+	return 0;
+}
