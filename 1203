@@ -1,0 +1,356 @@
+//
+//  main.cpp
+//  chujjuz
+//
+//  Created by Dawid Siarczyński on 25/11/2019.
+//  Copyright © 2019 Dawid Siarczyński. All rights reserved.
+/* zmienic zeby i to bylo od jakiej liczby chcemy grac i bedzie nam pokazywalo od tej liczby */
+//
+
+#include <cstdlib>
+#include <iostream>
+#include <time.h>
+#include<string.h>
+#include <queue>
+#include <stdio.h>
+#define SIZE 52
+using namespace std;
+
+
+struct Karta
+{
+	char figura;
+	char kolor;
+	int war;
+};
+//zmienne globalne
+Karta talia[SIZE];
+Karta player1[SIZE];
+Karta player2[SIZE];
+char const* const figura[13] =
+{ "dwojka","trojka","czworka","piatka","szostka","siodemka","osemka","dziewiatka","dziesiatka","walet","dama","krol","as" };
+
+char const* const kolor[4] = { "trefl","karo","kier","pik" };
+
+int counter = 0;
+
+queue <int> wplayer_1;
+queue <int> kplayer_1;
+queue <int> wplayer_2;
+queue <int> kplayer_2;
+queue <int> wwar_1;
+queue <int> wwar_2;
+queue <int> kwar_1;
+queue <int> kwar_2;
+queue<int> wzapcon;
+queue <int> kzapcon;
+
+void zlozTalie(Karta* wTalia, char const* const wFigura, char const* const wKolor)
+{
+	for (int i = 0; i < SIZE; i++)
+	{
+		wTalia[i].figura = i % 13;
+		wTalia[i].war = i % 13;
+		wTalia[i].kolor = i / 13;
+	}
+}
+void tasuj(Karta* wTalia)
+{
+	for (int i = 0; i < SIZE; i++)
+	{
+		int j = rand() % SIZE;
+		Karta t = wTalia[i];
+		wTalia[i] = wTalia[j];
+		wTalia[j] = t;
+	}
+}
+void wyswietl(Karta* wTalia) {
+	for (int i = 0; i < SIZE; i++) {
+		cout << figura[talia[i].figura] << " " << kolor[talia[i].kolor] << endl;
+	}
+}
+void rozdaj(Karta* wTalia) {
+	for (int i = 0; i < SIZE; i++) {
+		if (i % 2 == 0) {
+			wplayer_1.push(wTalia[i].figura);
+			kplayer_1.push(wTalia[i].kolor);
+		}
+		else {
+			wplayer_2.push(wTalia[i].figura);
+			kplayer_2.push(wTalia[i].kolor);
+		}
+	}
+};
+void licz(Karta talia[SIZE], Karta player1[SIZE], Karta player2[SIZE])
+{
+	int i = 0;
+	int p1 = 0, p2 = 0;
+	while (i <= (SIZE / 2)) {
+		if (wplayer_1.front() == 12)
+			p1 += 25; // as=25
+		if (wplayer_1.front() == 11)
+			p1 += 20;
+		if (wplayer_1.front() == 10)
+			p1 += 15;
+		if (wplayer_1.front() == 9)
+			p1 += 10;
+		wplayer_1.push(wplayer_1.front());
+		wplayer_1.pop();
+		if (wplayer_2.front() == 12)
+			p2 += 25; // as=25
+		if (wplayer_2.front() == 11)
+			p2 += 20;
+		if (wplayer_2.front() == 10)
+			p2 += 15;
+		if (wplayer_2.front() == 9)
+			p2 += 10;
+		wplayer_2.push(wplayer_1.front());
+		wplayer_2.pop();
+		i++;
+		cout << "gracz1;" << p1 << "chuj" << "gracz2;" << p2;
+		cout << "ja piernicze ja ";
+
+
+	}
+}
+void win1(Karta talia[SIZE], Karta player1[SIZE], Karta player2[SIZE])
+{
+	wwar_1.push(wplayer_1.front());
+	kwar_1.push(kplayer_1.front());
+	wplayer_1.pop();
+	kplayer_1.pop();
+
+	while (!wwar_1.empty() && !kwar_1.empty()) {
+		wplayer_1.push(wwar_1.front());
+		kplayer_1.push(kwar_1.front());
+		wwar_1.pop();
+		kwar_1.pop();
+	}
+	wwar_2.push(wplayer_2.front());
+	kwar_2.push(kplayer_2.front());
+	wplayer_2.pop();
+	kplayer_2.pop();
+
+	while (!wwar_2.empty() && !kwar_2.empty()) {
+		wplayer_1.push(wwar_2.front());
+		kplayer_1.push(kwar_2.front());
+		wwar_2.pop();
+		kwar_2.pop();
+	}
+
+	counter++;
+}
+
+void win2(Karta talia[SIZE], Karta player1[SIZE], Karta player2[SIZE])
+{
+	wwar_2.push(wplayer_2.front());
+	kwar_2.push(kplayer_2.front());
+	wplayer_2.pop();
+	kplayer_2.pop();
+	while (!wwar_2.empty() && !kwar_2.empty()) {
+		wplayer_2.push(wwar_2.front());
+		kplayer_2.push(kwar_2.front());
+		wwar_2.pop();
+		kwar_2.pop();
+	}
+	wwar_1.push(wplayer_1.front());
+	kwar_1.push(kplayer_1.front());
+	wplayer_1.pop();
+	kplayer_1.pop();
+
+	while (!wwar_1.empty() && !kwar_1.empty()) {
+		wplayer_2.push(wwar_1.front());
+		kplayer_2.push(kwar_1.front());
+		wwar_1.pop();
+		kwar_1.pop();
+	}
+
+	counter++;
+}
+//void bitwa
+void wojna(Karta talia[SIZE], Karta player1[SIZE], Karta player2[SIZE]) {
+
+	while (!wplayer_1.empty() && !wplayer_2.empty())
+	{
+		if (wplayer_1.front() > wplayer_2.front())
+		{
+			win1(talia, player1, player2);
+			if (wplayer_1.empty())
+				cout << "wygral gracz nr 2";
+			else if (wplayer_2.empty())
+				cout << "wygral gracz nr 1";
+		}
+		else if (wplayer_1.front() < wplayer_2.front())
+		{
+			win2(talia, player1, player2);
+			if (wplayer_1.empty())
+				cout << "wygral gracznr2";
+			else if (wplayer_2.empty())
+				cout << "wygral gracznr1";
+		}
+		else if (wplayer_1.front() == wplayer_2.front())
+		{
+			wwar_2.push(wplayer_2.front());
+			kwar_2.push(kplayer_2.front());
+			wplayer_2.pop();
+			kplayer_2.pop();
+			wwar_2.push(wplayer_2.front());
+			kwar_2.push(kplayer_2.front());
+			wplayer_2.pop();
+			kplayer_2.pop();
+			wwar_1.push(wplayer_1.front());
+			kwar_1.push(kplayer_1.front());
+			wplayer_1.pop();
+			kplayer_1.pop();
+			wwar_1.push(wplayer_1.front());
+			kwar_1.push(kplayer_1.front());
+			wplayer_1.pop();
+			kplayer_1.pop();
+
+			counter++;
+			if (wplayer_1.empty())
+				cout << "wygral gracz ntr2";
+			else if (wplayer_2.empty())
+				cout << "wygral gracz ntr1";
+			wojna(talia, player1, player2);
+			counter++;
+			return;
+		}
+	}
+	if (!wplayer_1.empty())
+		cout << "wygral gracz nr1";
+	else
+		cout << "wygral gracznr 2";
+	cout << "iloscc ruchow" << counter << endl;
+}
+void cardsmissing2(Karta player1[SIZE], Karta player2[SIZE]) {
+
+}
+void wojna_varB(Karta talia[SIZE], Karta player1[SIZE], Karta player2[SIZE]) {
+
+	while (!wplayer_1.empty() && !wplayer_2.empty())
+	{
+		if (wplayer_1.front() > wplayer_2.front())
+		{
+			win1(talia, player1, player2);
+			if (wplayer_1.empty())
+				cout << "wygral gracz nr 2";
+			else if (wplayer_2.empty())
+				cout << "wygral gracz nr 1";
+		}
+		else if (wplayer_1.front() < wplayer_2.front())
+		{
+			win2(talia, player1, player2);
+			if (wplayer_1.empty())
+				cout << "wygral gracznr2";
+			else if (wplayer_2.empty())
+				cout << "wygral gracznr1";
+		}
+		else if (wplayer_1.front() == wplayer_2.front())
+		{
+			int i = 0;
+			wwar_1.push(wplayer_1.front());
+			kwar_1.push(kplayer_1.front());
+			wplayer_1.pop();
+			kplayer_1.pop();
+			wwar_2.push(wplayer_2.front());
+			kwar_2.push(kplayer_2.front());
+			wplayer_2.pop();
+			kplayer_2.pop();
+			if (wplayer_1.empty() || wplayer_2.empty()) {
+				if (wplayer_1.empty()) { // koncza sie 2 karty graczowi 1
+					wwar_1.push(wplayer_2.front());
+					kwar_1.push(kplayer_2.front());
+					wplayer_2.pop();
+					kplayer_2.pop();
+					wplayer_1.push(wplayer_2.front());
+					kplayer_1.push(kplayer_2.front());
+					wplayer_2.pop();
+					kplayer_2.pop(); // karta na stosie gracza nr 1
+				}
+				if (wplayer_2.empty()) { // koncza sie 2 karty graczowi 2
+					wwar_2.push(wplayer_1.front());
+					kwar_2.push(kplayer_1.front());
+					wplayer_1.pop();
+					kplayer_1.pop();
+					wplayer_2.push(wplayer_1.front());
+					kplayer_2.push(kplayer_1.front());
+					wplayer_1.pop();
+					kplayer_1.pop(); // karta na stosie gracza nr 2
+				}
+			}
+			else {
+				wwar_2.push(wplayer_2.front());
+				kwar_2.push(kplayer_2.front());
+				wplayer_2.pop();
+				kplayer_2.pop();
+				wwar_1.push(wplayer_1.front());
+				kwar_1.push(kplayer_1.front());
+				wplayer_1.pop();
+				kplayer_1.pop();
+				if (wplayer_1.empty()) { // konczy sie 1 karta graczowi 1
+
+					wplayer_1.push(wplayer_2.front());
+					kplayer_1.push(kplayer_2.front());
+					wplayer_2.pop();
+					kplayer_2.pop(); // karta na stosie gracza nr 1
+				}
+				if (wplayer_2.empty()) { // konczy sie 1 karta graczowi 2
+					wplayer_2.push(wplayer_1.front());
+					kplayer_2.push(kplayer_1.front());
+					wplayer_1.pop();
+					kplayer_1.pop(); // karta na stosie gracza nr 2
+				}
+			}
+			
+				counter++;
+			if (wplayer_1.empty())
+				cout << "wygral gracz ntr2";
+			else if (wplayer_2.empty())
+				cout << "wygral gracz ntr1";
+			wojna_varB(talia, player1, player2);
+			counter++;
+			return;
+		}
+	}
+	if (!wplayer_1.empty())
+		cout << "wygral gracz nr1";
+	else
+		cout << "wygral gracznr 2";
+	cout << "iloscc ruchow" << counter << endl;
+}
+int main()
+{
+	srand(time(0));
+	//for (int i = 0; i <5 ; i++) {
+	zlozTalie(talia, *figura, *kolor);
+
+	//cout<<"talia ulozona"<<endl;
+
+	tasuj(talia);
+	//wyswietl(talia);
+	//cout << "/////////////////////////////////////////" << endl;
+	//    wyswietl(talia);
+
+	rozdaj(talia);
+	licz(talia, player1, player2);
+
+	//          cout << figura[wplayer_1.front()] << " " << kplayer_1.front() << endl;
+			  //cout << wplayer_2.front() << " " << kplayer_2.front() << endl;
+			 // cout << "/////////////////////////////////////////" << endl;
+	//wojna(talia, player1, player2);
+	wojna_varB(talia, player1, player2);
+	/*  FILE* fp;  używamy metody wysokopoziomowej - musimy mieć zatem identyfikator pliku, uwaga na gwiazdkę!
+	   char tekst[] = "wygral gracz nr1";
+	   if ((fp = fopen("test.txt", "a+")) == NULL) {
+		   printf("Nie mogę otworzyć pliku test.txt do zapisu!\n");
+		   exit(1);
+	   }
+	   fprintf(fp, "%s", tekst);
+	   fprintf(fp, "%d", counter);
+		zapisz nasz łańcuch w pliku
+//        fclose(fp);  zamknij plik
+		//counter = 0;*/
+		//}
+	return 0;
+}
