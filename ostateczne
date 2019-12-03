@@ -133,7 +133,7 @@ void win1(Karta talia[SIZE], Karta player1[SIZE], Karta player2[SIZE])
 	wplayer_2.pop();
 	kplayer_2.pop();
 	if (wplayer_2.empty()) {
-		cout << "wygral gracznr1";
+		cout << "wygral gracznr 1";
 	}
 
 	while (!wwar_2.empty() && !kwar_2.empty()) {
@@ -142,6 +142,8 @@ void win1(Karta talia[SIZE], Karta player1[SIZE], Karta player2[SIZE])
 		wwar_2.pop();
 		kwar_2.pop();
 	}
+
+	
 
 	counter++;
 }
@@ -167,7 +169,7 @@ void win2(Karta talia[SIZE], Karta player1[SIZE], Karta player2[SIZE])
 	kplayer_1.pop();
 
 	if (wplayer_1.empty())
-		cout << "wygral gracznr2";
+		cout << "wygral gracznr 2";
 	
 	
 
@@ -178,10 +180,8 @@ void win2(Karta talia[SIZE], Karta player1[SIZE], Karta player2[SIZE])
 		wwar_1.pop();
 		kwar_1.pop();
 	}
-	if (wplayer_1.empty())
-		cout << "wygral gracznr2";
-	else if (wplayer_2.empty())
-		cout << "wygral gracznr1";
+	
+	
 
 
 	counter++;
@@ -245,9 +245,9 @@ void wojna(Karta talia[SIZE], Karta player1[SIZE], Karta player2[SIZE]) {
 
 	}
 	if (!wplayer_1.empty())
-		cout << "wygral gracz nr1";
-	else
-		cout << "wygral gracznr 2";
+		cout << " wygral 1";
+	else if (!wplayer_2.empty())
+		cout << "wygral 2";
 	cout << "iloscc ruchow" << counter << endl;
 }
 void cardsmissing2(Karta player1[SIZE], Karta player2[SIZE]) {
@@ -260,18 +260,12 @@ void wojna_varB(Karta talia[SIZE], Karta player1[SIZE], Karta player2[SIZE]) {
 		if (wplayer_1.front() > wplayer_2.front())
 		{
 			win1(talia, player1, player2);
-			if (wplayer_1.empty())
-				cout << "wygral gracz nr 2";
-			else if (wplayer_2.empty())
-				cout << "wygral gracz nr 1";
+		
 		}
 		else if (wplayer_1.front() < wplayer_2.front())
 		{
 			win2(talia, player1, player2);
-			if (wplayer_1.empty())
-				cout << "wygral gracznr2";
-			else if (wplayer_2.empty())
-				cout << "wygral gracznr1";
+			
 		}
 		else if (wplayer_1.front() == wplayer_2.front())
 		{
@@ -332,19 +326,19 @@ void wojna_varB(Karta talia[SIZE], Karta player1[SIZE], Karta player2[SIZE]) {
 
 			counter++;
 			if (wplayer_1.empty())
-				cout << "wygral gracz ntr2";
+				break;
 			else if (wplayer_2.empty())
-				cout << "wygral gracz ntr1";
+				break;
 			wojna_varB(talia, player1, player2);
 			counter++;
 			return;
 		}
 	}
 	if (!wplayer_1.empty())
-		cout << "wygral gracz nr1";
+		cout << " ";
 	else
-		cout << "wygral gracznr 2";
-	cout << "iloscc ruchow" << counter << endl;
+		cout << " ";
+	cout << "iloscc ruchow " << counter << endl;
 }
 void dequeue(Karta talia[SIZE], Karta player1[SIZE], Karta player2[SIZE])
 {
