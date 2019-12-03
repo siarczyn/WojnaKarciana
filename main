@@ -1,0 +1,48 @@
+int main()
+{
+	
+	char wariant;
+	srand(time(0));
+	//for (int i = 0; i <5 ; i++) {
+	zlozTalie(talia, *figura, *kolor);
+
+	//cout<<"talia ulozona"<<endl;
+
+	tasuj(talia);
+	//wyswietl(talia);
+	//cout << "/////////////////////////////////////////" << endl;
+	//    wyswietl(talia);
+
+	rozdaj(talia);
+	licz(talia, player1, player2);
+
+	//          cout << figura[wplayer_1.front()] << " " << kplayer_1.front() << endl;
+			  //cout << wplayer_2.front() << " " << kplayer_2.front() << endl;
+	cin >> wariant;		 // cout << "/////////////////////////////////////////" << endl;
+	switch (wariant) {
+		
+	case 'A':
+		wojna(talia, player1, player2);
+	
+		break;
+	case 'B':
+		wojna_varB(talia, player1, player2);
+		break;
+	}
+
+	//wojna(talia, player1, player2);
+	//wojna_varB(talia, player1, player2);
+	/*  FILE* fp;  używamy metody wysokopoziomowej - musimy mieć zatem identyfikator pliku, uwaga na gwiazdkę!
+	   char tekst[] = "wygral gracz nr1";
+	   if ((fp = fopen("test.txt", "a+")) == NULL) {
+		   printf("Nie mogę otworzyć pliku test.txt do zapisu!\n");
+		   exit(1);
+	   }
+	   fprintf(fp, "%s", tekst);
+	   fprintf(fp, "%d", counter);
+		zapisz nasz łańcuch w pliku
+//        fclose(fp);  zamknij plik
+		//counter = 0;*/
+		//}
+	return 0;
+}
